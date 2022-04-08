@@ -1,8 +1,25 @@
 <?php
 
+use App\Http\Livewire\Admin\AddCategoryComponent;
+use App\Http\Livewire\Admin\AddDriverComponent;
+use App\Http\Livewire\Admin\AddProductComponent;
 use App\Http\Livewire\Admin\AdminDashboardComponent;
+use App\Http\Livewire\Admin\AdminViewProduct;
+use App\Http\Livewire\Admin\AdminViewProductComponent;
+use App\Http\Livewire\Admin\ManageCategoryComponent;
+use App\Http\Livewire\Admin\ManageDriversComponent;
+use App\Http\Livewire\Admin\ManageProductComponent;
+use App\Http\Livewire\Admin\ManageUsersComponent;
+use App\Http\Livewire\CartComponent;
+use App\Http\Livewire\CheckoutComponent;
+use App\Http\Livewire\Driver\DriverDashboardComponent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\HomeComponent;
+use App\Http\Livewire\ProductDetiles;
+use App\Http\Livewire\productmin\AdminViewProduct as ProductminAdminViewProduct;
+use App\Http\Livewire\ThankyouComponent;
+use App\Http\Livewire\User\UploadFileForAccessory;
+use App\Http\Livewire\User\UploadfileToPrintCommponent;
 use App\Http\Livewire\User\UserDashboardComponent;
 
 /*
@@ -16,15 +33,36 @@ use App\Http\Livewire\User\UserDashboardComponent;
 |
 */
 
-Route::get('/', HomeComponent::class);
+Route::get('/', HomeComponent::class)->name('home');
+Route::get('/cart', CartComponent::class)->name('product.cart');
+Route::get('/checkout', CheckoutComponent::class)->name('checkout');
+Route::get('/productDetiles/{product_slug:slug}',ProductDetiles::class)->name('productDetiles');
+Route::get('/think-you', ThankyouComponent::class)->name('thankyou');
 
 
 //admin 
 Route::middleware(['auth:sanctum','verified','authAdmin'])->group(function(){
-    Route::get('/admin/dashboarpd',AdminDashboardComponent::class)->name('hbadmin.dasoard');
+    Route::get('/admin/dashboard',AdminDashboardComponent::class)->name('admin.dashboard');
+    Route::get('/admin/users',ManageUsersComponent::class)->name('admin.users');
+    Route::get('/admin/drivers',ManageDriversComponent::class)->name('admin.drivers');
+    Route::get('/admin/addDriver',AddDriverComponent::class)->name('admin.AddDriver');
+    Route::get('/admin/categories',ManageCategoryComponent::class)->name('admin.categories');
+    Route::get('/admin/addCategory',AddCategoryComponent::class)->name('admin.AddCategory');
+    Route::get('/admin/products',ManageProductComponent::class)->name('admin.products');
+    Route::get('/admin/addProduct',AddProductComponent::class)->name('admin.addProduct');
+    Route::get('/admin/viewProduct/{product_slug:slug}',AdminViewProductComponent::class)->name('admin.viewProduct');
+
+
 });
 //User
 Route::middleware(['auth:sanctum','verified','authUser'])->group(function(){
     Route::get('/user/dashboard',UserDashboardComponent::class)->name('user.dashboard');
+    Route::get('/user/uploadFileForAccessory/{product_slug:slug}',UploadFileForAccessory::class)->name('user.uploadFileForAccessory');
+    Route::get('/user/uploadfileToPrint',UploadfileToPrintCommponent::class)->name('user.uploadfileToPrint');
+
+});
+//driver
+Route::middleware(['auth:sanctum','verified','authDriver'])->group(function(){
+    Route::get('/driver/dashboard',DriverDashboardComponent::class)->name('driver.dashboard');
 
 });

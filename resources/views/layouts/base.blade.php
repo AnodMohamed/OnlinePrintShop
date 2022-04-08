@@ -26,7 +26,20 @@
 
     <!-- Head Libs -->
     <script src="{{ asset('assets/plugins/modernizr.custom.js')}}"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    {{-------text editor------}}
+    <script src="https://cdn.tiny.cloud/1/hj792k117l0inekz8p0lwczrmdvvlgz7lf0vx3dooh2q937o/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+    {{----datetimepicker-----}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js" integrity="sha512-GDey37RZAxFkpFeJorEUwNoIbkTwsyC736KNSYucu1WJWFK9qTdzYub8ATxktr6Dwke7nbFaioypzbDOQykoRg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js" integrity="sha512-EnXkkBUGl2gBm/EIZEgwWpQNavsnBbeMtjklwAa7jLj60mJk932aqzXFmdPKCG6ge/i8iOCK0Uwl1Qp+S0zowg==" crossorigin="anonymous"></script>
+    <!-- JS Page Level -->
+     <!-- Head Libs -->
+ 
+     .
     <!--[if lt IE 9]>
     <script src="assets/plugins/iesupport/html5shiv.js"></script>
     <script src="assets/plugins/iesupport/respond.min.js"></script>
@@ -35,11 +48,7 @@
     @livewireStyles
     
 </head>
-<style>
-	html{
-		direction: rtl;
-	}
-</style>
+
 <body id="home" class="wide">
 <!-- PRELOADER -->
 <div id="preloader">
@@ -84,7 +93,7 @@
                             <div class="media-body">
                                 <div>
                                     <a href="#" class="btn btn-theme btn-theme-dark" data-dismiss="modal">Close</a><!--
-                                    --><a href="shopping-cart.html" class="btn btn-theme btn-theme-transparent btn-call-checkout">Checkout</a>
+                                    --><a href="{{ route('product.cart')}}" class="btn btn-theme btn-theme-transparent btn-call-checkout">Cart</a>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +138,7 @@
                             <li><a href="#">€ EURO</a></li>
                         </ul>
                     </li>
-x
+
                     <li class="dropdown flags">
                         @if(Route::has('login'))
                             @auth
@@ -137,7 +146,13 @@ x
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Admin : ({{ Auth::user()->name }})  <i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="dropdown-menu">
                                         <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                                        <li><a title="Manage Users" href="{{ route('admin.users') }}">Manage Users</a></li>
+                                        <li><a title="Manage Drivers" href="{{ route('admin.drivers') }}">Manage Drivers</a></li>
+                                        <li><a title="Manage Categories" href="{{ route('admin.categories') }}">Manage Categories</a></li>
+                                        <li><a title="Manage Products" href="{{ route('admin.products') }}">Manage Products</a></li>
+
                                         <li><a href="{{ route('logout') }}"  onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logouut </a></li>
+
                                         <form id="logout-form" method="POST" action="{{ route('logout') }}">
                                             @csrf
                                         </form>
@@ -146,12 +161,24 @@ x
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> User : ({{ Auth::user()->name }})  <i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="dropdown-menu">
                                         <li><a href="{{ route('user.dashboard') }}">Dashboard</a></li>
+                                        <a title="Edit Profile" href="{{ route('profile.show') }}">Edit Profile</a>
+
+                                        <li><a href="{{ route('logout') }}"  onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logouut </a></li>
+                                        <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                        </form>
+                                    </ul>
+                                @elseif (Auth::user()->utype == 'DRV')
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> User : ({{ Auth::user()->name }})  <i class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="dropdown-menu">
+                                        <li><a href="{{ route('driver.dashboard') }}">Dashboard</a></li>
                                         <li><a href="{{ route('logout') }}"  onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logouut </a></li>
                                         <form id="logout-form" method="POST" action="{{ route('logout') }}">
                                             @csrf
                                         </form>
                                     </ul>
                                 @endif
+
                             @endauth
                         @endif
                     </li>
@@ -170,7 +197,7 @@ x
 
                 <!-- Logo -->
                 <div class="logo">
-                    <a href=""><img src="{{ asset('assets/img/logo.png')}}" alt="logo"/></a>
+                    <a href=""><img src="{{ asset('assets/img/logoshop.png')}}" alt="logo"/></a>
                 </div>
                 <!-- /Logo -->
 
@@ -182,16 +209,7 @@ x
                 <!-- /Header search -->
 
                 <!-- Header shopping cart -->
-                <div class="header-cart">
-                    <div class="cart-wrapper">
-                        <a href="wishlist.html" class="btn btn-theme-transparent hidden-xs hidden-sm"><i class="fa fa-heart"></i></a>
-                        <a href="compare-products.html" class="btn btn-theme-transparent hidden-xs hidden-sm"><i class="fa fa-exchange"></i></a>
-                        <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs"> 0 item(s) - $0.00 </span> <i class="fa fa-angle-down"></i></a>
-                        <!-- Mobile menu toggle button -->
-                        <a href="#" class="menu-toggle btn btn-theme-transparent"><i class="fa fa-bars"></i></a>
-                        <!-- /Mobile menu toggle button -->
-                    </div>
-                </div>
+                @livewire('cart-header-component');
                 <!-- Header shopping cart -->
 
             </div>
@@ -447,18 +465,16 @@ x
 <script src="{{ asset('assets/plugins/jquery.smoothscroll.min.js')}}"></script>
 <script src="{{ asset('assets/plugins/smooth-scrollbar.min.js')}}"></script>
 
-<!-- JS Page Level -->
 <script src="{{ asset('assets/js/theme.js')}}"></script>
 
 <!--[if (gte IE 9)|!(IE)]><!-->
 <script src="{{ asset('assets/plugins/jquery.cookie.js')}}"></script>
-<script src="{{ asset('assets/js/theme-config.js')}}"></script>
 <!--<![endif]-->
-<script>
+    <script>
 $('.dropdown-toggle').dropdown()
 	</script>
 	@livewireScripts
 	
 	@stack('scripts') 
 	</body>
-	</html>
+</html>
