@@ -48,7 +48,7 @@
                     <p class="text-center">There is no user to display</p>
                 @endif
                 <div class="required" style="text-align: center;">
-                    <a href="{{ route('admin.AddDriver')}}"   class="btn  btn-theme btn-theme-dark " > Add Driver</a>
+                    <a href="{{ route('admin.AddDriver')}}"   class="btn  btn-theme btn-theme-dark " style="background-color:black"> Add Driver</a>
                 </div>
             </div>
         </section>

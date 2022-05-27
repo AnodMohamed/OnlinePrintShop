@@ -18,6 +18,6 @@ class ManageDriversComponent extends Component
     public function render()
     {
         $users =DB::table('users')->where('utype','DRV')->get();
-        return view('livewire.admin.manage-drivers-component',['users' => $users]);
+        return view('livewire.admin.manage-drivers-component',['users' => $users])->layout('layouts.base');
     }
 }

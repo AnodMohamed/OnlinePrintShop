@@ -28,7 +28,9 @@ class CreateOrdersTable extends Migration
             $table->string('line2')->nullable();
             $table->string('province')->nullable();
             $table->string('zipcode')->nullable();
-            $table->enum('status',['ordered','delivered','canceled'])->default('ordered');
+            $table->string('shippmode')->nullable();
+            $table->string('paymentmode')->nullable();
+            $table->string('status')->default('ordered');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

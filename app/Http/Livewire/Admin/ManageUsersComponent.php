@@ -19,6 +19,6 @@ class ManageUsersComponent extends Component
     public function render()
     {
         $users =DB::table('users')->where('utype','USER')->get();
-        return view('livewire.admin.manage-users-component',['users' => $users]);
+        return view('livewire.admin.manage-users-component',['users' => $users])->layout('layouts.base');
     }
 }

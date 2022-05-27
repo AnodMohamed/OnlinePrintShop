@@ -19,7 +19,7 @@
                         {{Session::get('message')}}
                     </div>
                  @endif
-                <form name="contact-form"   wire:submit.prevent="placeOrder" class="contact-form" id="contact-form">
+                <form name="contact-form"   wire:submit.prevent="placeOrder" class="contact-form" id="contact-form"    data-stripe-publishable-key="{{ env('STRIPE_KEY') }}">
 
                     <div class="outer required">
                         <div class="form-group af-inner">
@@ -117,60 +117,146 @@
                     </div>
 
                     <div class="summary summary-checkout">
+
+                        
                         <div class="summary-item payment-method">
+
                             <h4 class="title-box">Payment Method</h4>
-                           
+                            @if ($paymentmode == 'card')
+                            {{-----Name on Card-----}}
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                <label for="validationTooltip01">Name on Card</label>
+                                <input type="text" class="form-control" id="cardname" placeholder="Name on Card" wire:model="cardname" required>
+                                @error('cardname')
+                                    <div class=" text-danger">
+                                        {{$message}}
+                                    </div>
+                                @enderror
+                                </div>         
+                            </div>
+         
+  
+  
+                            {{-----Card Number-----}}
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    4242424242424242
+                                    <label for="validationTooltip01">Card Number</label>
+                                    <input type="text"  class="form-control" id="cardnumber" placeholder="Card Number" wire:model="cardnumber" required>
+                                    @error('cardnumber')
+                                        <div class=" text-danger">
+                                            {{$message}}
+                                        </div>
+                                    @enderror
+                                </div>         
+                            </div>
                             
-                            <p class="summary-info"><span class="title">Check / Money order</span></p>
-                            <p class="summary-info"><span class="title">Credit Cart (saved)</span></p>
+                                {{-----Card CVC-----}}
+                                <div class="row">
+                                <div class="col-md-12 mb-3">
+                                <label for="validationTooltip01">CVC</label>
+                                    <input type="text"  class="form-control" placeholder='ex. 311'  id="cvc"  wire:model="cvc" required>
+                                    @error('cvc')
+                                        <div class=" text-danger">
+                                            {{$message}}
+                                        </div>
+                                    @enderror
+                                </div>         
+                                </div>
+  
+                            {{----Expiration Month-----}}
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="validationTooltip01">Expiration Month</label>
+                                <input type="text" class="form-control" id="nonth" placeholder="MM" wire:model="nonth" required>
+                                @error('nonth')
+                                    <div class=" text-danger">
+                                        {{$message}}
+                                    </div>
+                                @enderror
+                                </div>         
+                            </div>
+
+
+                            {{-----Expiration Year -----}}
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="validationTooltip01">Expiration Yer</label>
+                                <input type="text" size='4' class="form-control" id="year" placeholder="YYYY" wire:model="year" required>
+                                @error('year')
+                                    <div class=" text-danger">
+                                        {{$message}}
+                                    </div>
+                                @enderror
+                                </div>         
+                            </div>
+
+
+                            @endif
+                            <p class="summary-info grand-total"><span>Payment</span> <span class="grand-total-price">{{Session::get('checkout')['total']}}</span></p>
+
                             <div class="choose-payment-methods">
                                 <label class="payment-method">
-                                    <input name="payment-method" id="payment-method-bank" value="cod" type="radio" wire:model="paymentmode">
-                                    <span>Cash On Delivery</span>
-                                    <span class="payment-desc">Order Now Pay on Delivery </span>
+                                    <input name="payment-method" id="payment-method-bank" value="cash" type="radio" wire:model="paymentmode">
+                                    @error('paymentmode')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                    <span>Cash </span>
                                    
                                 </label>
                                 <label class="payment-method">
                                     <input name="payment-method" id="payment-method-visa" value="card" type="radio" wire:model="paymentmode">
                                    
-                                    <span>Debit / Credit Card  </span>
-                                    <span class="payment-desc">There are many variations of passages of Lorem Ipsum available</span>
-                                    
+                                    <span>Debit / Credit Card  </span>                                    
                                 </label>
-                                <label class="payment-method">
-                                    <input name="payment-method" id="payment-method-paypal" value="paypal" type="radio" wire:model="paymentmode">
-                                    
-                                    <span>Paypal</span>
-                                    <span class="payment-desc">You can pay with your credit</span>
-                                    <span class="payment-desc">card if you don't have a paypal account</span>
-                                </label>
+
                                 @error('paymentmode')
                                     <span class="text-danger">{{$message}}</span>
                                 @enderror
-                               
                             </div>
-                            @if(Session::has('checkout'))
-                                <p class="summary-info grand-total"><span>Grand Total</span> <span class="grand-total-price">{{Session::get('checkout')['total']}}</span></p>
-                            @endif
-                            @if($errors->isEmpty())
-                            <div wire:ignore id="processing" style="font-size:22px; margin-bottom:20px;padding-left:37px;color:green;display:none;">
-                                <i class="fa fa-spinner fa-pulse fa-fw"></i>
-                                <span>Processing</span>
-                            </div>
-                            @endif
-                            <button type="submit" class="btn btn-medium">Place order now</button>
+
                         </div>
-                        <div class="summary-item shipping-method">
-                            <h4 class="title-box f-title">Shipping method</h4>
-                            <p class="summary-info"><span class="title">Flat Rate</span></p>
-                            <p class="summary-info"><span class="title">Fixed $50.00</span></p>
-                            
-                        </div>
+
+                     
+
+                       
+                       
+                    </div>
+                    <div class="choose-Shippe-methods">
+                        <p class="summary-info grand-total"><span>Shippe</span> <span class="grand-total-price">{{Session::get('checkout')['total']}}</span></p>
+
+                        <label class="payment-method">
+                            <input name="Shippe-method" id="Shippe-method-visa" value="On store" type="radio" wire:model="shippmode">
+                           
+                            <span>On store </span>                                    
+                        </label>
+
+                        <label class="payment-method">
+                            <input name="Shippe-method" id="Shippe-method-visa" value="Delivery" type="radio" wire:model="shippmode">
+                           
+                            <span>Delivery  </span>                                    
+                        </label>
+                        @error('shippmode')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
+                      
                     </div>
 
-                    <div class="required" style="text-align: center;">
-                        <button  type="submit" class="btn  btn-theme btn-theme-dark " > Add Driver</button>
+                    @if ($shippmode == 'Delivery')
+                    <div class="summary-item shipping-method">
+                        <p class="summary-info"><span class="title">{{Session::get('checkout')['total']+10}}</span></p>
+                        
                     </div>
+                    @else
+
+                        <div class="summary-item shipping-method">
+                            <p class="summary-info"><span class="title">{{Session::get('checkout')['total']}}</span></p>
+                            
+                        </div>
+                    @endif
+
+                    <button class="msg_send_btn" type="submit">send</button>
 
                 </form>
 

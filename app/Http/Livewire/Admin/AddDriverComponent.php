@@ -51,6 +51,6 @@ class AddDriverComponent extends Component
     }
     public function render()
     {
-        return view('livewire.admin.add-driver-component');
+        return view('livewire.admin.add-driver-component')->layout('layouts.base');
     }
 }

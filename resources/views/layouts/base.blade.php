@@ -75,20 +75,7 @@
                 <div class="cart-items">
                     <div class="cart-items-inner">
 
-                        <div class="media">
-                            <a class="pull-left" href="#"><img class="media-object item-image" src="assets/img/preview/shop/order-1s.jpg" alt=""></a>
-                            <p class="pull-right item-price">$450.00</p>
-                            <div class="media-body">
-                                <h4 class="media-heading item-title"><a href="#">1x Standard Product</a></h4>
-                                <p class="item-desc">Lorem ipsum dolor</p>
-                            </div>
-                        </div>
-                        <div class="media">
-                            <p class="pull-right item-price">$450.00</p>
-                            <div class="media-body">
-                                <h4 class="media-heading item-title summary">Subtotal</h4>
-                            </div>
-                        </div>
+                
                         <div class="media">
                             <div class="media-body">
                                 <div>
@@ -112,80 +99,18 @@
                 @if(Route::has('login'))
                     @auth
                         <ul class="list-inline">
-                            <li><a href=""><i class="fa fa-envelope"></i> <span>support@yourdomain.com</span></a></li>
+                            <li><a href=""><i class="fa fa-envelope"></i> <span>os2063718@gmail.com</span></a></li>
                         </ul>
                     @else
                         <ul class="list-inline">
                             <li class="icon-user"><a href="{{ route('login') }}"><img src="assets/img/icon-1.png" alt=""/> <span>Login</span></a></li>
                             <li class="icon-form"><a href="{{ route('register') }}"><img src="assets/img/icon-2.png" alt=""/> <span class="colored">Sign Up</span></span></a></li>
-                            <li><a href=""><i class="fa fa-envelope"></i> <span>support@yourdomain.com</span></a></li>
+                            <li><a href=""><i class="fa fa-envelope"></i> <span>os2063718@gmail.com</span></a></li>
                         </ul>
                     @endif
                 @endif
             </div>
-            <div class="top-bar-right">
-                <ul class="list-inline">
-                    <li class="hidden-xs"><a href="about.html">About</a></li>
-                    <li class="hidden-xs"><a href="blog.html">Blog</a></li>
-                    <li class="hidden-xs"><a href="contact.html">Contact</a></li>
-                    <li class="hidden-xs"><a href="faq.html">FAQ</a></li>
-                    <li class="hidden-xs"><a href="wishlist.html">My Wishlist</a></li>
-                    <li class="dropdown currency">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">€ EURO<i class="fa fa-angle-down"></i></a>
-                        <ul role="menu" class="dropdown-menu">
-                            <li><a href="#">€ EURO</a></li>
-                            <li><a href="#">€ EURO</a></li>
-                            <li><a href="#">€ EURO</a></li>
-                        </ul>
-                    </li>
 
-                    <li class="dropdown flags">
-                        @if(Route::has('login'))
-                            @auth
-                                @if(Auth::user()->utype == 'ADM')
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Admin : ({{ Auth::user()->name }})  <i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="dropdown-menu">
-                                        <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                                        <li><a title="Manage Users" href="{{ route('admin.users') }}">Manage Users</a></li>
-                                        <li><a title="Manage Drivers" href="{{ route('admin.drivers') }}">Manage Drivers</a></li>
-                                        <li><a title="Manage Categories" href="{{ route('admin.categories') }}">Manage Categories</a></li>
-                                        <li><a title="Manage Products" href="{{ route('admin.products') }}">Manage Products</a></li>
-
-                                        <li><a href="{{ route('logout') }}"  onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logouut </a></li>
-
-                                        <form id="logout-form" method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                        </form>
-                                    </ul>
-                                @elseif (Auth::user()->utype == 'USER')
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> User : ({{ Auth::user()->name }})  <i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="dropdown-menu">
-                                        <li><a href="{{ route('user.dashboard') }}">Dashboard</a></li>
-                                        <a title="Edit Profile" href="{{ route('profile.show') }}">Edit Profile</a>
-
-                                        <li><a href="{{ route('logout') }}"  onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logouut </a></li>
-                                        <form id="logout-form" method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                        </form>
-                                    </ul>
-                                @elseif (Auth::user()->utype == 'DRV')
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> User : ({{ Auth::user()->name }})  <i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="dropdown-menu">
-                                        <li><a href="{{ route('driver.dashboard') }}">Dashboard</a></li>
-                                        <li><a href="{{ route('logout') }}"  onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logouut </a></li>
-                                        <form id="logout-form" method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                        </form>
-                                    </ul>
-                                @endif
-
-                            @endauth
-                        @endif
-                    </li>
-
-
-                </ul>
-            </div>
         </div>
     </div>
     <!-- /Header top bar -->
@@ -201,154 +126,13 @@
                 </div>
                 <!-- /Logo -->
 
-                <!-- Header search -->
-                <div class="header-search">
-                    <input class="form-control" type="text" placeholder="What are you looking?"/>
-                    <button><i class="fa fa-search"></i></button>
-                </div>
-                <!-- /Header search -->
-
                 <!-- Header shopping cart -->
                 @livewire('cart-header-component');
                 <!-- Header shopping cart -->
 
             </div>
         </div>
-        <div class="navigation-wrapper">
-            <div class="container">
-                <!-- Navigation -->
-                <nav class="navigation closed clearfix">
-                    <a href="#" class="menu-toggle-close btn"><i class="fa fa-times"></i></a>
-                    <ul class="nav sf-menu">
-                        <li class="active"><a href="index.html">Homepage</a>
-                            <ul>
-                                <li><a href="index.html">Homepage 1</a></li>
-                                <li><a href="index-2.html">Homepage 2</a></li>
-                                <li><a href="index-3.html">Homepage 3</a></li>
-                                <li><a href="index-4.html">Homepage 4</a></li>
-                                <li><a href="index-5.html">Homepage 5</a></li>
-                                <li><a href="index-6.html">Homepage 6</a></li>
-                                <li><a href="index-7.html">Homepage 7</a></li>
-                                <li><a href="index-8.html">Homepage 8</a></li>
-                                <li><a href="index-9.html">Homepage 9</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="category.html">Shop</a>
-                            <ul>
-                                <li><a href="category.html">Shop Sidebar Left</a></li>
-                                <li><a href="category-right.html">Shop Sidebar Right</a></li>
-                                <li><a href="category-list.html">Shop List View</a></li>
-                                <li><a href="product-details.html">Product Page</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Blog</a>
-                            <ul>
-                                <li><a href="blog.html">Blog Sidebar Left </a></li>
-                                <li><a href="blog-right.html">Blog Sidebar Right</a></li>
-                                <li><a href="blog-post.html">Blog Single Post</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="portfolio.html">Portfolio</a>
-                            <ul>
-                                <li><a href="portfolio.html">Portfolio 3 columns</a></li>
-                                <li><a href="portfolio-4col.html">Portfolio 4 columns</a></li>
-                                <li><a href="portfolio-alt.html">Portfolio Alternate</a></li>
-                                <li><a href="portfolio-single.html">Portfolio Single</a></li>
-                            </ul>
-                        </li>
-                        <li class="megamenu"><a href="#">Features</a>
-                            <ul>
-                                <li class="row">
-                                    <div class="col-md-2">
-                                        <h4 class="block-title"><span>Womens</span></h4>
-                                        <ul>
-                                            <li><a href="#">Dresses</a></li>
-                                            <li><a href="#">Rompers & Jumpsuits</a></li>
-                                            <li><a href="#">Bodysuits</a></li>
-                                            <li><a href="#">Shirts & Blouses</a></li>
-                                            <li><a href="#">Coats & Jackets</a></li>
-                                            <li><a href="#">Blazers</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <h4 class="block-title"><span>Mens</span></h4>
-                                        <ul>
-                                            <li><a href="#">T-Shirts & Vests</a></li>
-                                            <li><a href="#">Sweaters & Cardigans</a></li>
-                                            <li><a href="#">Hoodies & Sweats</a></li>
-                                            <li><a href="#">Coats & Jackets</a></li>
-                                            <li><a href="#">Shirts</a></li>
-                                            <li><a href="#">Shorts</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <h4 class="block-title"><span>Pages</span></h4>
-                                        <ul>
-                                            <li><a href="shortcodes.html"><strong>Shortcodes</strong></a></li>
-                                            <li><a href="typography.html"><strong>Typography</strong></a></li>
-                                            <li><a href="coming-soon.html"><strong>Coming soon</strong></a></li>
-                                            <li><a href="error-page.html"><strong>404 Page</strong></a></li>
-                                            <li><a href="about.html"><strong>About</strong></a></li>
-                                            <li><a href="login.html"><strong>Login</strong></a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h4 class="block-title"><span>Paragraph</span></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-                                        <p>Suspendisse molestie est nec tortor placerat, vel pellentesque metus sollicitudin. Suspendisse congue sem mauris, at ultrices felis blandit non.</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="product-list">
-                                            <div class="media">
-                                                <a class="pull-left media-link" href="#">
-                                                    <img class="media-object" src="{{ asset('assets/img/preview/shop/top-sellers-2.jpg')}}" alt="">
-                                                    <i class="fa fa-plus"></i>
-                                                </a>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading"><a href="#">Standard Product Header</a></h4>
-                                                    <div class="rating">
-                                                        <span class="star"></span><!--
-                                                        --><span class="star active"></span><!--
-                                                        --><span class="star active"></span><!--
-                                                        --><span class="star active"></span><!--
-                                                        --><span class="star active"></span>
-                                                    </div>
-                                                    <div class="price"><ins>$400.00</ins> <del>$425.00</del></div>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <a class="pull-left media-link" href="#">
-                                                    <img class="media-object" src="{{ asset('assets/img/preview/shop/top-sellers-3.jpg')}}" alt="">
-                                                    <i class="fa fa-plus"></i>
-                                                </a>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading"><a href="#">Standard Product Header</a></h4>
-                                                    <div class="rating">
-                                                        <span class="star"></span><!--
-                                                        --><span class="star active"></span><!--
-                                                        --><span class="star active"></span><!--
-                                                        --><span class="star active"></span><!--
-                                                        --><span class="star active"></span>
-                                                    </div>
-                                                    <div class="price"><ins>$400.00</ins> <del>$425.00</del></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a href="category.html">Men</a></li>
-                        <li><a href="category.html">Women</a></li>
-                        <li><a href="category.html">Kids</a></li>
-                        <li><a href="category.html">New</a></li>
-                        <li class="sale"><a href="category.html">Sale</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </nav>
-                <!-- /Navigation -->
-            </div>
-        </div>
+      
     </header>
     <!-- /HEADER -->
 
@@ -357,70 +141,7 @@
 	{{---@livewire('footer-component');----}}
 	 <!-- FOOTER -->
 	 <footer class="footer">
-        <div class="footer-widgets">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-md-3">
-                        <div class="widget">
-                            <h4 class="widget-title">About Us</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sollicitudin ultrices suscipit. Sed commodo vel mauris vel dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            <ul class="social-icons">
-                                <li><a href="#" class="facebook"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#" class="instagram"><i class="fa fa-instagram"></i></a></li>
-                                <li><a href="#" class="pinterest"><i class="fa fa-pinterest"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="widget">
-                            <h4 class="widget-title">News Letter</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            <form action="#">
-                                <div class="form-group">
-                                    <input class="form-control" type="text" placeholder="Enter Your Mail and Get $10 Cash"/>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-theme btn-theme-transparent">Subscribe</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="widget widget-categories">
-                            <h4 class="widget-title">Information</h4>
-                            <ul>
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">Delivery Information</a></li>
-                                <li><a href="#">Contact Us</a></li>
-                                <li><a href="#">Terms and Conditions</a></li>
-                                <li><a href="#">Private Policy</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="widget widget-tag-cloud">
-                            <h4 class="widget-title">Item Tags</h4>
-                            <ul>
-                                <li><a href="#">Fashion</a></li>
-                                <li><a href="#">Jeans</a></li>
-                                <li><a href="#">Top Sellers</a></li>
-                                <li><a href="#">E commerce</a></li>
-                                <li><a href="#">Hot Deals</a></li>
-                                <li><a href="#">Supplier</a></li>
-                                <li><a href="#">Shop</a></li>
-                                <li><a href="#">Theme</a></li>
-                                <li><a href="#">Website</a></li>
-                                <li><a href="#">Isamercan</a></li>
-                                <li><a href="#">Themeforest</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+       
         <div class="footer-meta">
             <div class="container">
                 <div class="row">

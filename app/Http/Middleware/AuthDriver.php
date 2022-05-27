@@ -16,7 +16,7 @@ class AuthDriver
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->utype === 'ADM'){
+        if(Auth::user()->utype === 'DRV'){
             return $next($request);
         }else{
             session()->flush();

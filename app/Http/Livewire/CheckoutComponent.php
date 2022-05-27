@@ -4,7 +4,10 @@ namespace App\Http\Livewire;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\Transaction;
 use Cart;
+use Darryldecode\Cart\Cart as CartCart;
 use Exception;
 use Illuminate\Auth\Events\Validated;
 use Livewire\Component;
@@ -22,13 +25,15 @@ class CheckoutComponent extends Component
     public $zipcode;
 
     public $paymentmode;
+    public $shippmode;
     public $thankyou;
-
-    public $card_no;
-    public $exp_month;
-    public $exp_year;
+    public $int_price;
+    
     public $cvc;
-
+    public $cardname;
+    public $cardnumber;
+    public $nonth;
+    public $year;
     public function updated($fields)
     {
         $this->validateOnly($fields, [
@@ -40,22 +45,24 @@ class CheckoutComponent extends Component
             'line1' => 'required',
             'province' => 'required',
             'zipcode' => 'required',
+            'shippmode' => 'required',
             'paymentmode' => 'required',
 
         ]);
        
-        /*
+        
         if($this->paymentmode == 'card')
         {
             $this->validateOnly($fields,[
-                'card_no' =>'required|numeric',
-                'exp_month' =>'required|numeric',
-                'exp_year' =>'required|numeric',
-                'cvc' =>'required|numeric',
+                'cardname' => ['required','string'],
+                'cardnumber'=> ['required', 'numeric' ,'digits:16'],
+                'cvc' => [ 'required', 'numeric' ,'digits:3'],
+                'nonth' => [ 'required', 'numeric' ,'digits:2', 'min:1', 'max:12'],
+                'year' => [ 'required', 'numeric' ,'digits:4', 'min:'.(date('Y'))],
 
             ]);
         }
-        */
+        
     }
 
     public function placeOrder()
@@ -87,111 +94,120 @@ class CheckoutComponent extends Component
         $order->province = $this->province;
         $order->zipcode = $this->zipcode;
         $order->status ='ordered';
+        $order->shippmode = $this->shippmode;
+        $order->paymentmode =$this->paymentmode;
+
+
         $order->save();
         
         foreach(Cart::instance('cart')->content() as $item)
         {
-            $orderitem = new OrderItem();
-            $orderitem->product_id =$item->id;
-            $orderitem->order_id =$order->id;
-            $orderitem->price =$item->price;
-            $orderitem->quantity =$item->qty;
-            $orderitem->save();
+
+        
+          $orderitem  = New OrderItem();
+          $orderitem->product_id =$item->id;
+          $orderitem->order_id = $order->id;
+          $orderitem->price =$item->price;
+          $orderitem->quantity = $item->qty;
+          $orderitem->save();
+                
         }
 
-        if($this->paymentmode = 'cod')
+        if($this->paymentmode == 'cash')
         {
-           // $this->makeTransaction($order->id, 'pending');
-           // $this->resetCart();
-        }
+           $this->resetCart();
+        }elseif ($this->paymentmode == 'card'){
 
-       
-            /*
-            elseif ($this->paymentmode = 'card'){
-                $stripe =Stripe::make(env("STRIPE_KEY"));
+            $this->int_price=(int)session()->get('checkout')['total'];;
 
-                try{
-                    $token =$stripe->tokens()->create([
-                        'card' => [
-                            'number' => $this->card_no,
-                            'exp_month' => $this->exp_month,
-                            'exp_year' => $this->exp_year,
-                            'cvc' => $this->cvc,
-                        ]
-                    ]);
-
-                    if(!isset($token['id'])){
-                        session()->flash('stripe_error','The stripe token was not generated correctly!');
-                        $this->thankyou =0;
-                    }
-
-                    $customer =$stripe->customers()->create([
-                        'name' => $this->firstname .''. $this->lastname,
-                        'email' => $this->email,
-                        'phone' => $this->mobile,
-                        'address' => [
-                            'line' =>$this->line1,
-                            'postal_code' => $this->zipcode,
-                            'city' => $this->city,
-                            'state' => $this->province,
-                            'country' => $this->country
-                        ],
-                        'shipping' =>[
-                            'name' =>$this->firstname.'', $this->lastname,
-                            'address' => [
-                                'line' =>$this->line1,
-                                'postal_code' => $this->zipcode,
-                                'city' => $this->city,
-                                'state' => $this->province,
-                                'country' => $this->country
-                            ],
-                        ],
-                        'source' => $token['id']
-                    ]);
-                    $charge =$stripe->charges()->create([
-                        'customer' => $customer['id'],
-                        'currency' => 'USD',
-                        'amount' => session()->get('checkout')['total'],
-                        'description' =>'Payment for order no'. $order->id
-                    ]);
-                    if($charge['status'] == 'succeeded')
-                    {
-                        $this->makeTransaction($order->id,'approved');
-                        $this->resetCart();
-                    }
-                    else
-                    {
-                        session()->flash('stripe_error','Error in Transaction!');
-                        $this->thankyou =0;
-                    }
-                }catch(Exception $e){
-                    session()->flash('stripe_error',$e->getMessage());
-                    $this->thankyou =0;
-                }
-            }*/
+            $this->validate([
+                'cardname' => ['required','string'],
+                'cardnumber'=> ['required', 'numeric' ,'digits:16'],
+                'cvc' => [ 'required', 'numeric' ,'digits:3'],
+                'nonth' => [ 'required', 'numeric' ,'digits:2', 'min:1', 'max:12'],
+                'year' => [ 'required', 'numeric' ,'digits:4', 'min:'.(date('Y'))],
+    
+            ]);
             
-           //$this->sendOrderConfirmationMail($order);    
-             
+             //add STRIPE_SECRET 
+            $stripe = new  \Stripe\StripeClient(env('STRIPE_SECRET'));
+
+
+            //add customer detials
+            
+            $customer = $stripe->customers->create([
+                'source' => 'tok_mastercard',
+                "email" => Auth::user()->email,
+            ]);
+            //add card detials
+            $stripe->tokens->create([
+
+                'card' => [
+                'name'=>$this->cardname,
+                'number' =>$this->cardnumber,
+                'exp_month' =>$this->nonth,
+                'exp_year' =>$this->year,
+                'cvc' => $this->year,
+                ],
+
+            ]);
+
+            //send data to stripe
+            $intent =  $stripe->paymentIntents->create([
+                    'amount'=> $this->int_price.'00',
+                    'currency' => 'usd',
+                    'payment_method_types' => ['card'],
+                    'payment_method' => 'pm_card_visa',
+                    'customer'=> $customer,
+                    'confirm' => true,
+                ]);
+
+                        // check if status is success
+            $paymentStatus = json_decode($this->generateResponse($intent),true);
+    
+            if ($paymentStatus['success'] === true) {
+
+                if($customer) {
+                    //add Transaction detials to database
+                    $transaction = new Transaction();
+                    $transaction->order_id = $order->id;
+                    $transaction->amount =  $this->int_price;
+                    $transaction->currency = 'usd';
+                    $transaction->status ='payed';
+                    $transaction->transaction_id = $customer->id;
+                    $transaction->save();
+            
+                
+        
+                }
+                $this->resetCart();             
+
+        
+            }
+            }
     }
-    public function verifyForCheckout()
-    {
-        if(!Auth::check())
-        {
-            return redirect()->route('login');
-        }
-        else if ($this->thankyou)
-        {
-            return redirect()->route('thankyou');
-        }
-        else if (!session()->get('checkout'))
-        {
-            return redirect()->route('product.cart');
-        }
+    public function resetCart(){
+        $this->thankyou = 1;
+        Cart::instance('cart')->destroy();
+        session()->forget('checkout'); 
+        session()->flash('message','Order has been added successfully!');  
+        return redirect()->route('user.myOrders');
 
     }
+    public function generateResponse($intent) {
+        if ($intent->status == 'succeeded') {
+          // Handle post-payment fulfillment
+          return json_encode(['success' => true]);
+        } else {
+          // Any other status would be unexpected, so error
+          return json_encode(['error' => 'Invalid PaymentIntent status']);
+        }
+    }
+
+
+
     public function render()
     {
-        $this->verifyForCheckout();
         return view('livewire.checkout-component')->layout('layouts.base');
     }
 }

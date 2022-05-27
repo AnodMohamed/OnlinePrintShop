@@ -13,6 +13,6 @@ class CartHeaderComponent extends Component
 
         //$carts =Shoppingcart::where('identifier', Auth::user()->email)->first();
 
-        return view('livewire.cart-header-component');
+        return view('livewire.cart-header-component')->layout('layouts.base');
     }
 }
